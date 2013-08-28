@@ -5,7 +5,7 @@ class DataMonster extends PApplet{
 
   private Arduino arduino;
 
-  private static final int TOTAL_NUM_JOINTS = 5;
+  public static final int TOTAL_NUM_JOINTS = 5;
   private int[] pinNum;
 
   DataMonster(int iSerialPort)
@@ -13,6 +13,7 @@ class DataMonster extends PApplet{
     pinNum = new int[TOTAL_NUM_JOINTS];
     
     // Setting up interface with Ardtruino board 
+    print("Connecting to SerialComm #" + str(iSerialPort) + "\n");
     arduino = new Arduino(this, Arduino.list()[iSerialPort], 57600);
     
     // Mapping joint to arduino pins / array[joint] = pin
