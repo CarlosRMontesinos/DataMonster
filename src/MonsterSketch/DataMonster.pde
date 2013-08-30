@@ -18,8 +18,7 @@ class DataMonster extends PApplet {
 
   private Servo[] m_oJoinArray;
 
-  DataMonster(int iSerialPort)
-  {  
+  DataMonster(int iSerialPort) {  
     // Setting up interface with Ardtruino board 
     print("Print List:");
 
@@ -27,21 +26,50 @@ class DataMonster extends PApplet {
 
     m_oJoinArray = new Servo[TOTAL_NUM_JOINTS] ;
 
+    // Create joints for the robot
     m_oJoinArray[0] = new Servo(JOINT_0_PIN, m_oArduino);
     m_oJoinArray[1] = new Servo(JOINT_1_PIN, m_oArduino);
     m_oJoinArray[2] = new Servo(JOINT_2_PIN, m_oArduino);
     m_oJoinArray[3] = new Servo(JOINT_3_PIN, m_oArduino);
     m_oJoinArray[4] = new Servo(JOINT_4_PIN, m_oArduino);
 
+    // Calibrate the robot joints
+    m_oJoinArray[0].setPwmLimits(65, 160);
+    m_oJoinArray[1].setPwmLimits(113, 175);
+    m_oJoinArray[2].setPwmLimits(113, 175);
+    m_oJoinArray[3].setPwmLimits(55, 150);
+    m_oJoinArray[4].setPwmLimits(55, 175);
   }
 
-  public void moveJoint(int _iJointNum, float _fAngle)
-  {
-    if ( 0 <= _iJointNum && _iJointNum <TOTAL_NUM_JOINTS )
-      m_oJoinArray[_iJointNum].setAngle(_fAngle);
-    else
-      print("ERROR: joint #: " + _iJointNum + " doesn't exist");
+  public boolean moveJoint(int _iJointNum, float _fAngle) {
+    if ( 0 <= _iJointNum && _iJointNum <TOTAL_NUM_JOINTS ) {
+      // Try to move the joint
+      if ( m_oJoinArray[_iJointNum].setAngle(_fAngle) ) {
+        print("ERROR: joint angle out of bounds.\n");
+        return true;
+      }
+    }
+    else {
+      print("ERROR: joint #: " + _iJointNum + " doesn't exist\n");
+      return true;
+    }
+    return false;
+  }
+
+  public boolean moveJoint(int _iJointNum, int _sSteps) {
+    if ( 0 <= _iJointNum && _iJointNum <TOTAL_NUM_JOINTS ) {
+      // Try to move the joint
+      if ( m_oJoinArray[_iJointNum].setSteps(_sSteps) ) {
+        print("ERROR: joint angle out of bounds.\n");
+        return true;
+      }
+    }
+    else {
+      print("ERROR: joint #: " + _iJointNum + " doesn't exist\n");
+      return true;
+    }
+
+    return false;
   }
 }
-
 
