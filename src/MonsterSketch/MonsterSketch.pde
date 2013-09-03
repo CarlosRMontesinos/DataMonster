@@ -13,6 +13,10 @@ int g_iJointCounter;
 long g_iJointUpdateTimerCounter;
 static final int JOINT_UPDATE_TIMER_COUNTER_LIMIT = 10;
 
+//////////////////////////////////
+// Setup Function / Called once
+// Initialize the robot environment 
+//////////////////////////////////
 void setup() {
   size(800, 700);
   smooth();
@@ -32,8 +36,32 @@ void setup() {
   g_iJointUpdateTimerCounter = 0;
 }
 
-
+//////////////////////////////////
+// Draw Function
+//////////////////////////////////
 void draw() {
+
+  // Check if Robot is calibrates
+  if (myDataMonster.isCalibrated())
+  { 
+    // Calibrate Robot
+    calibRobot();
+  }
+  else
+  {
+    // Control Robot
+    controlRobot();
+  }
+}
+
+//////////////////////////////////
+// Auxiliary Functions
+//////////////////////////////////
+
+// Robot calibration interface
+void calibRobot()
+{
+  //print("Calibrating Robot\n");
 
   // Update the joint position every 100 draw cycles
   g_iJointUpdateTimerCounter++;
@@ -45,8 +73,8 @@ void draw() {
     // myDataMonster.movejoint passes the servo number and servo signal
     myDataMonster.moveJoint(g_iJointSelect, gi);
     //myDataMonster.moveJoint(g_iJointSelect, g_fAngle);
-   
-    
+
+
     //print("Joint: " + g_iJointSelect + " Command: " + g_fAngle + " \n");
     print("Joint: " + g_iJointSelect + " Command: " + gi + " \n");
     // print("Count: " + g_iJointUpdateTimerCounter%JOINT_UPDATE_TIMER_COUNTER_LIMIT + "\n");
@@ -55,6 +83,26 @@ void draw() {
   }
 }
 
+// Robot control
+void controlRobot()
+{
+  print("Controlling Robot\n");
+  
+  // Control Robot Code
+  
+  // 1) Input: Get data stream / Get camera stream
+  
+  // 2) Process: Get data stream / process camera
+  
+  // 3) Ouput: Actuate Robot
+  
+  // 4) Update GUI
+  
+}
+
+//////////////////////////////////
+// Callback Functions
+//////////////////////////////////
 void mousePressed() {
 }
 
@@ -78,7 +126,7 @@ void keyPressed() {
       g_iJointCounter++;
     }
   }
-  
+
   if (gi < 0)
     gi = 0;
   if (gi > 255)

@@ -3,8 +3,24 @@ import cc.arduino.*;
 
 class DataMonster extends PApplet {
 
+  ///////////////////////////
+  // Private Members
+  ///////////////////////////
   private Arduino m_oArduino;
 
+  private int[] pinNum;
+  private Servo[] m_oJoinArray;
+  private boolean m_bIsCalib;
+
+  ///////////////////////////
+  // Private Methods
+  ///////////////////////////
+
+
+
+  ///////////////////////////
+  // Public Members
+  ///////////////////////////
   public static final int TOTAL_NUM_JOINTS = 5;
 
   // Arduino pin assignments
@@ -14,10 +30,10 @@ class DataMonster extends PApplet {
   public static final int JOINT_3_PIN = 9;
   public static final int JOINT_4_PIN = 10;
 
-  private int[] pinNum;
 
-  private Servo[] m_oJoinArray;
-
+  ///////////////////////////
+  // Public methods / Interface
+  ///////////////////////////
   DataMonster(int iSerialPort) {  
     // Setting up interface with Ardtruino board 
     print("Print List:");
@@ -33,12 +49,20 @@ class DataMonster extends PApplet {
     m_oJoinArray[3] = new Servo(JOINT_3_PIN, m_oArduino);
     m_oJoinArray[4] = new Servo(JOINT_4_PIN, m_oArduino);
 
+    // Check robot calibration / WARNING: The calibration routine is still under develpment
+    m_bIsCalib = true;
+
     // Calibrate the robot joints
     m_oJoinArray[0].setPwmLimits(65, 160);
     m_oJoinArray[1].setPwmLimits(113, 175);
     m_oJoinArray[2].setPwmLimits(113, 175);
     m_oJoinArray[3].setPwmLimits(55, 150);
     m_oJoinArray[4].setPwmLimits(55, 175);
+  }
+
+  boolean isCalibrated()
+  {
+    return  m_bIsCalib;
   }
 
   public boolean moveJoint(int _iJointNum, float _fAngle) {
