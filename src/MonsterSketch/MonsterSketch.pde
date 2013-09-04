@@ -2,9 +2,12 @@
 // Global Variables
 ////////////////////////////
 ServoVis myServoVis;
+MonsterVis myMonsterVis;
 DataMonster myDataMonster;
 int gi = 0;
 boolean incDec = true;
+
+PShape bg_image;
 
 //Number of joints (servos)
 int g_iNumJoints;
@@ -16,11 +19,16 @@ long g_iJointUpdateTimerCounter;
 static final int JOINT_UPDATE_TIMER_COUNTER_LIMIT = 10;
 
 void setup() {
-  size(800, 700);
+  size(1000, 800, P3D);
+  lights();
   smooth();
+  
+  bg_image = loadShape("bgtest.svg");
 
-// Set the number of servos(joints)
-g_iNumJoints = 5;
+  myMonsterVis = new MonsterVis(1, 1);
+
+  // Set the number of servos(joints)
+  g_iNumJoints = 5;
   // Initialize global variables
   int iSerialPort = 1;
   //create a new DataMonster object that passes the port number
@@ -46,9 +54,10 @@ void draw() {
   g_iJointUpdateTimerCounter++;
   if ( (g_iJointUpdateTimerCounter%JOINT_UPDATE_TIMER_COUNTER_LIMIT) == 0) {
 
-  // Reset background
-  background(255);
-  
+    // Reset background
+    background(255);
+    shape(bg_image,0,0);
+
     // Update joint value
     if (incDec == true) {
       gi++;
@@ -70,6 +79,8 @@ void draw() {
     for (int i = 0; i< g_iNumJoints ; i++) {
       servos[i].display(gi);
     }
+    myMonsterVis.cameraPos();  
+    myMonsterVis.display();
   }
 }
 
@@ -81,4 +92,5 @@ void mousePressed() {
   }
   print("Joint: " + g_iJointSelect + "\n");
 }
+
 
